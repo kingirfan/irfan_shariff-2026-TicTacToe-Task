@@ -1,5 +1,6 @@
 package com.example.tictactowtask.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tictactowtask.viewmodel.TicTacToeViewModel
 
@@ -29,6 +32,20 @@ fun TicTacToeScreen(modifier: Modifier = Modifier, viewModel: TicTacToeViewModel
 
     val board by viewModel.board.observeAsState(
         initial = List(3) { List(3) { "" } })
+
+    val context = LocalContext.current
+    val gameStatus by viewModel.gameStatus.observeAsState(initial = "Player X's Turn")
+    val isGameOver by viewModel.isGameOver.observeAsState(initial = false)
+
+    LaunchedEffect(gameStatus) {
+        if (
+            gameStatus.contains("Wins") ||
+            gameStatus.contains("Draw")
+        ) {
+            Toast.makeText(context, gameStatus, Toast.LENGTH_LONG).show()
+        }
+    }
+
 
     Column(
         modifier = modifier
@@ -53,7 +70,8 @@ fun TicTacToeScreen(modifier: Modifier = Modifier, viewModel: TicTacToeViewModel
 
         GameBoardUI(
             board = board,
-            onCellClick = viewModel::onSquareCellClicked
+            onCellClick = viewModel::onSquareCellClicked,
+            isGameOver = isGameOver
         )
     }
 }
@@ -61,7 +79,8 @@ fun TicTacToeScreen(modifier: Modifier = Modifier, viewModel: TicTacToeViewModel
 @Composable
 fun GameBoardUI(
     board: List<List<String>>,
-    onCellClick: (Int, Int) -> Unit
+    onCellClick: (Int, Int) -> Unit,
+    isGameOver: Boolean,
 ) {
     Column(
         modifier = Modifier
@@ -75,6 +94,7 @@ fun GameBoardUI(
                         modifier = Modifier.weight(1f),
                         value = board[row][column],
                         onClick = { onCellClick(row, column) },
+                        isGameOver = isGameOver
                     )
                 }
             }
@@ -86,18 +106,32 @@ fun GameBoardUI(
 fun SquareCellUI(
     modifier: Modifier = Modifier,
     value: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    isGameOver: Boolean = false
 ) {
     Box(
         modifier = modifier
             .fillMaxSize()
             .border(1.dp, MaterialTheme.colorScheme.primary)
             .background(color = Color.Transparent)
-            .clickable(enabled = value.isEmpty()) {
+            .background(
+                when (value) {
+                    "X" -> Color(0xFFE3F2FD)
+                    "O" -> Color(0xFFFFEBEE)
+                    else -> Color.Transparent
+                }
+            )
+            .clickable(enabled = !isGameOver && value.isEmpty()) {
                 onClick()
             },
         contentAlignment = Alignment.Center
     ) {
-        Text(text = value, fontWeight = FontWeight.Bold, fontSize = 36.sp, color = Color.Black)
+        Text(
+            text = value, fontWeight = FontWeight.Bold, fontSize = 36.sp, color = when (value) {
+                "X" -> Color(0xFF1976D2) // Blue
+                "O" -> Color(0xFFD32F2F) // Red
+                else -> Color.Black
+            }
+        )
     }
 }
