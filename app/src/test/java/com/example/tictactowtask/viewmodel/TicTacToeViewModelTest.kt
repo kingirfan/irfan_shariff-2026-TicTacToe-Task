@@ -96,4 +96,16 @@ class TicTacToeViewModelTest {
         assertEquals(true, viewModel.isGameOver.value ?: false)
     }
 
+    @Test
+    fun `resetGame resets board and status`() {
+
+        viewModel.onSquareCellClicked(0, 0)
+
+        viewModel.resetGame()
+
+        assertEquals("", viewModel.board.value?.get(0)?.get(0))
+        assertEquals("Player X's Turn", viewModel.gameStatus.value)
+        assertEquals(false, viewModel.isGameOver.value ?: true)
+    }
+
 }

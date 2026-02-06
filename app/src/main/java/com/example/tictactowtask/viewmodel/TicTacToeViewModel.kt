@@ -84,5 +84,12 @@ class TicTacToeViewModel : ViewModel() {
         return true
     }
 
+    fun resetGame() {
+        _board.value = List(3) { List(3) { "" } }
+        _gameStatus.value = "Player X's Turn"
+        _isGameOver.value = false
+        xTurn = true
+    }
+
 
 }

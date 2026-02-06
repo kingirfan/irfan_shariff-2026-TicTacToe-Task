@@ -26,3 +26,8 @@ TicTacToeScreen.kt
 1. If X wins → "Player X Wins"
 2. If O wins → "Player O Wins"
 3. If no winner → "It's a Draw"
+
+**How to Run**
+1. Open project in Android Studio
+2. Sync Gradle
+3. Click Run
