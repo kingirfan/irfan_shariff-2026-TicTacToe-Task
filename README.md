@@ -31,3 +31,10 @@ TicTacToeScreen.kt
 1. Open project in Android Studio
 2. Sync Gradle
 3. Click Run
+
+**How to Run Test Cases**
+
+1. Open the file:
+TicTacToeViewModelTest.kt
+2. Right click inside the file
+3. Select Run 'TicTacToeViewModelTest'
