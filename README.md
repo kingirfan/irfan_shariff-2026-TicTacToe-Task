@@ -38,3 +38,6 @@ TicTacToeScreen.kt
 TicTacToeViewModelTest.kt
 2. Right click inside the file
 3. Select Run 'TicTacToeViewModelTest'
+
+<img width="1080" height="2400" alt="tic_tok" src="https://github.com/user-attachments/assets/63e19387-3c8a-40fa-85d4-cc68811a7c36" />
+
